@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <title>複数選択(jQuery UI)</title>
+  <link href="./css/lib/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet" type="text/css" />
+  <style>
+    #selectable {
+      list-style-type: none;
+      width:105px; height: 60px;
+      margin: 0; padding: 0;
+      border-left: solid 1px #ccc;
+      border-top: solid 1px #ccc;
+      border-bottom: solid 1px #ccc;
+      border-right: none;
+    }
+    #selectable li {
+      float:left;
+      width:20px; height: 60px;
+      margin: 0; padding: 0;
+      border-left:none;
+      border-top:none;
+      border-bottom:none;
+      border-right:solid 1px #ccc;
+    }
+    #selectable .ui-selecting { background: none; }
+    #selectable .ui-selected { background: none; }
+    #selectable .ui-selectee { background: none; }
+    #selectable .blockTL { background-color: #ccc; border-right: solid 1px #fff; }
+  </style>
+</head>
+<body style="font-size:62.5%;">
+  <ul id="selectable" onSelectStart="return false;" onMouseDown="return false;">
+    <li class="ui-widget-content"></li>
+    <li class="ui-widget-content"></li>
+    <li class="ui-widget-content"></li>
+    <li class="ui-widget-content"></li>
+    <li class="ui-widget-content"></li>
+  </ul>
+
+  <script src="./js/lib/jquery-1.7.1.min.js"></script>
+  <script src="./js/lib/jquery-ui-1.8.18.custom.js"></script>
+  <script>
+  $(function() {
+    $("#selectable").click(function() {
+      alert('click!');
+    });
+    $("#selectable").selectable({
+      start      : function(e, ui) { },  // 1:開始
+      unselecting: function(e, ui) { },  // 2:選択解除中
+      selecting  : function(e, ui) { },  // 3:選択中
+      unselected : function(e, ui) { },  // 4:選択解除時
+      selected   : function(e, ui) { },  // 5:選択完了時
+      stop       : function (e, ui) {    // 6:終了
+        var selected = $('.ui-selected', this), target;
+        if (selected.length === 1) {
+          // クリック
+          console.log('-click-');
+          target = $(selected[0]);
+          if ( ! target.hasClass('blockTL')) {
+            target.addClass('blockTL');
+          } else {
+            target.removeClass('blockTL');
+          }
+        } else if (selected.length > 1) {
+          // ドラッグ
+          console.log('-drag-');
+          for (var i = 0; i < selected.length; ++i) {
+            target = $(selected[i]);
+            if ( ! target.hasClass('blockTL')) {
+              target.addClass('blockTL');
+            } else {
+              // target.removeClass('blockTL');
+            }
+          }
+        }
+      }
+    });
+  });
+  </script>
+</body>
+</html>
